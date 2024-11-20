@@ -1,0 +1,44 @@
+name: pg_click
+services:
+  db_postgres:
+    image: postgres:17.1
+    env_file: "./.env"
+    volumes:
+      -  pg_data:/var/lib/postgresql/data
+      - ./init_pg.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+    ports: 
+      - "5432:5432"
+    networks:
+      - service-net
+    
+  db_clickhouse:
+    image: clickhouse:24.10.2.80
+    env_file: "./.env"
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse/
+      - ./init_ch.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+    ports: 
+      - "8123:8123"
+    networks:
+      - service-net
+    cap_add:
+      - SYS_NICE 
+      - IPC_LOCK  
+      - NET_ADMIN
+      - SYS_PTRACE
+    depends_on:
+      db_postgres:
+        condition: service_started
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    
+volumes:
+  pg_data:
+  clickhouse_data:
+  clickhouse_logs:
+networks: 
+  service-net:
