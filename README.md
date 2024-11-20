@@ -34,4 +34,5 @@
    
    ```$ docker-compose up --build -d ```  
 
-5. Запустите spark_app.py для загрузки данных с помощью PySpark
+5. Запустите spark_app.py для загрузки данных с помощью PySpark  
+   ![Снимок экрана от 2024-11-20 15-12-46](https://github.com/user-attachments/assets/4921945e-032c-4270-b079-5f190367f405)
